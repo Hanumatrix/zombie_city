@@ -1248,7 +1248,7 @@
         }
 
         // Load background audio on init and play immediately
-        loadAudioFile("public/videoplayback.mp3")
+        loadAudioFile("/videoplayback.mp3")
           .then((buffer) => {
             soundEffects.background = buffer;
             console.log("Background audio loaded successfully");
@@ -1256,7 +1256,7 @@
           .catch((e) => console.log("Failed to load background audio:", e));
 
         // Load gunshot audio for shooting
-        loadAudioFile("public/gunshot.m4a")
+        loadAudioFile("/gunshot.m4a")
           .then((buffer) => {
             soundEffects.gunshot = buffer;
             console.log("Gunshot audio loaded successfully");
