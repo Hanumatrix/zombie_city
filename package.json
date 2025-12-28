@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "convex dev",
-    "build": "convex build"
+    "build": "echo 'No build needed - static files only'"
   },
   "dependencies": {
     "convex": "latest",
