@@ -1248,7 +1248,7 @@
         }
 
         // Load background audio on init and play immediately
-        loadAudioFile("public/videoplayback.weba")
+        loadAudioFile("public/videoplayback.mp3")
           .then((buffer) => {
             soundEffects.background = buffer;
             console.log("Background audio loaded successfully");
@@ -2373,6 +2373,17 @@
           if (e.code === "KeyD") moveRight = false;
         });
         document.addEventListener("mousedown", shoot);
+        // Play background audio on first user interaction (browser autoplay policy)
+        document.addEventListener(
+          "click",
+          () => {
+            if (soundEffects.background && !soundEffects.backgroundPlaying) {
+              playLoopingAudio(soundEffects.background, 0.4);
+              soundEffects.backgroundPlaying = true;
+            }
+          },
+          { once: true }
+        );
         document.addEventListener("mousemove", (e) => {
           // Ensure PointerLockControls receives mouse movement
           if (controls && controls.isLocked) {
