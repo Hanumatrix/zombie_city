@@ -186,6 +186,27 @@
       #pause-menu button:last-of-type:hover {
         background: #c0392b;
       }
+      #pause-menu input[type="range"] {
+        cursor: pointer;
+      }
+      #pause-menu input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: #e74c3c;
+        cursor: pointer;
+        border-radius: 50%;
+        border: 2px solid #fff;
+      }
+      #pause-menu input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        background: #e74c3c;
+        cursor: pointer;
+        border-radius: 50%;
+        border: 2px solid #fff;
+      }
       @media (max-width: 768px) {
         #ui {
           top: 10px;
@@ -253,7 +274,7 @@
           />
           <button onclick="startGame()">ENTER ARENA</button>
           <div style="margin-top: 30px; font-size: 12px; color: #aaa">
-            <p>WASD: Move | Mouse: Look | Click: Shoot</p>
+            <p>WASD: Move | Mouse: Look | Click: Shoot | P: Pause</p>
             <p>Survive the zombie apocalypse as long as you can</p>
           </div>
         </div>
@@ -390,7 +411,61 @@
     <div id="pause-menu">
       <h1>GAME PAUSED</h1>
       <button onclick="resumeGame()">RESUME</button>
-      <button onclick="returnToMenu()">RETURN TO MENU</button>
+
+      <div
+        style="
+          margin-top: 30px;
+          padding: 20px;
+          background: rgba(0, 0, 0, 0.6);
+          border-radius: 10px;
+          border: 2px solid #e74c3c;
+          min-width: 300px;
+        "
+      >
+        <h2
+          style="
+            color: #ffaa00;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+          "
+        >
+          ⚙ SETTINGS
+        </h2>
+
+        <div style="margin-bottom: 25px; text-align: left">
+          <label
+            style="
+              color: #fff;
+              font-weight: bold;
+              display: block;
+              margin-bottom: 8px;
+            "
+          >
+            📷 Camera Sensitivity:
+            <span id="sensitivity-value" style="color: #ffaa00">15</span>/30
+          </label>
+          <input
+            type="range"
+            id="sensitivity-slider"
+            min="1"
+            max="30"
+            value="15"
+            onchange="updateCameraSensitivity(this.value)"
+            style="width: 100%; cursor: pointer; height: 8px"
+          />
+          <p style="color: #aaa; font-size: 0.9rem; margin-top: 5px">
+            Lower = Slower / Higher = Faster
+          </p>
+        </div>
+      </div>
+
+      <button
+        onclick="returnToMenu()"
+        style="margin-top: 30px; background: #e74c3c"
+      >
+        RETURN TO MENU
+      </button>
     </div>
 
     <div id="ui">
@@ -406,6 +481,13 @@
       <div id="health-container"><div id="health-bar"></div></div>
       <div id="ammo-counter">Ammo: <span id="ammo">∞</span></div>
       <div id="boss-warning" class="boss-txt">⚠ GIANT ZOMBIE APPROACHING ⚠</div>
+      <div
+        id="bat-warning"
+        class="boss-txt"
+        style="color: #9933ff; display: none; margin-top: 10px"
+      >
+        🦇 SWARM OF BATS INCOMING 🦇
+      </div>
     </div>
     <div id="crosshair"></div>
     <div id="multiplayer-info">Players: <span id="player-count">1</span></div>
@@ -672,6 +754,10 @@
       // Pause System
       let isPaused = false;
       let pausedTime = 0;
+
+      // Game Settings
+      let cameraSensitivity = 15; // Default sensitivity (1-30 scale)
+      let waveNumber = 0; // Wave counter for giant spawns
 
       // Physics world
       let physicsWorld = null;
@@ -1248,7 +1334,7 @@
         }
 
         // Load background audio on init and play immediately
-        loadAudioFile("videoplayback.mp3")
+        loadAudioFile("videoplayback.m4a")
           .then((buffer) => {
             soundEffects.background = buffer;
             console.log("Background audio loaded successfully");
@@ -1609,6 +1695,14 @@
 
       function spawnBats() {
         if (!isApocalypse) return;
+
+        // Show bat warning
+        const batWarning = document.getElementById("bat-warning");
+        batWarning.style.display = "block";
+        setTimeout(() => {
+          batWarning.style.display = "none";
+        }, 3000); // Hide after 3 seconds
+
         // Spawn 4 bats
         for (let i = 0; i < 4; i++) {
           // Create bat as a simple triangle wing shape
@@ -1655,8 +1749,6 @@
             hasAttacked: false,
           });
         }
-        // Show bat spawn notification
-        showPopupNotification("⚠️ BATS SPAWNING ⚠️", "#ff6600");
         playSimpleTone(250, 0.2, 0.3);
       }
 
@@ -1971,7 +2063,11 @@
             spawnNPC(false, true);
           }
           giantZombieCount++; // Increment counter for next spawn
+          waveNumber++; // Increment wave counter
           lastGiantSpawnTime = time;
+
+          // Update wave display
+          document.getElementById("wave").innerText = waveNumber;
         }
 
         if (controls.isLocked) {
@@ -2348,9 +2444,24 @@
         controls.lock();
       }
 
+      function updateCameraSensitivity(value) {
+        cameraSensitivity = parseFloat(value);
+        document.getElementById("sensitivity-value").innerText =
+          cameraSensitivity;
+        // Store in localStorage for persistence
+        localStorage.setItem("cameraSensitivity", cameraSensitivity);
+        console.log(`Camera sensitivity set to: ${cameraSensitivity}`);
+      }
+
       function returnToMenu() {
         location.reload();
       }
+
+      // Expose functions globally
+      window.pauseGame = pauseGame;
+      window.resumeGame = resumeGame;
+      window.updateCameraSensitivity = updateCameraSensitivity;
+      window.returnToMenu = returnToMenu;
 
       function setupInput() {
         // Keyboard controls
@@ -2359,9 +2470,10 @@
           if (e.code === "KeyS") moveBackward = true;
           if (e.code === "KeyA") moveLeft = true;
           if (e.code === "KeyD") moveRight = true;
-          // Pause with ESC key
-          if (e.code === "Escape") {
-            if (controls.isLocked) {
+          // Pause with P key
+          if (e.code === "KeyP") {
+            e.preventDefault();
+            if (controls && controls.isLocked && !isPaused) {
               pauseGame();
             }
           }
@@ -2385,9 +2497,20 @@
           { once: true }
         );
         document.addEventListener("mousemove", (e) => {
-          // Ensure PointerLockControls receives mouse movement
-          if (controls && controls.isLocked) {
-            controls.onMouseMove(e);
+          // Mouse movement is automatically handled by PointerLockControls
+          // Sensitivity will be applied through the controls' rotation directly
+          if (controls && controls.isLocked && !isPaused) {
+            // Sensitivity multiplier applied to the controls
+            const sensitivityMultiplier = cameraSensitivity / 15; // Normalize to 1.0 at value 15
+            controls.getObject().rotation.order = "YXZ";
+            controls.getObject().rotation.y -=
+              e.movementX * 0.002 * sensitivityMultiplier;
+            controls.getObject().rotation.x -=
+              e.movementY * 0.002 * sensitivityMultiplier;
+
+            // Clamp rotation to avoid gimbal lock
+            const euler = controls.getObject().rotation;
+            euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
           }
         });
 
@@ -2404,6 +2527,16 @@
         document.getElementById("menu").style.display = "none";
         document.getElementById("ui").style.display = "block";
         document.getElementById("pName").innerText = name;
+
+        // Load saved settings from localStorage
+        const savedSensitivity = localStorage.getItem("cameraSensitivity");
+        if (savedSensitivity) {
+          cameraSensitivity = parseFloat(savedSensitivity);
+          document.getElementById("sensitivity-slider").value =
+            cameraSensitivity;
+          document.getElementById("sensitivity-value").innerText =
+            cameraSensitivity;
+        }
 
         // Try to connect to multiplayer (optional)
         // initMultiplayer("ws://your-server.com:8080");
