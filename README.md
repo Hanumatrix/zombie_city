@@ -5,7 +5,7 @@
 > No downloads. No installs. Just pure survival.
 
 -🎮 **Play now:** [https://unrivaled-gumption-60d183.netlify.app/]
--📦 **Status:** Actively developed  
+
 
 <p align="center">
   <img src="public/zombie.gif" alt="Zombie City Gameplay" width="80%" />
@@ -69,13 +69,10 @@
 ## 🖼️ Game Preview
 
 <p align="center">
-  <img src="public/screenshot.png" width="45%" />
-  <img src="public/screenshot1.png" width="45%" />
+  <img src="public/screenshot.png" alt="Zombie City Gameplay 1" width="45%" />
+  <img src="public/screenshot1.png" alt="Zombie City Gameplay 2" width="45%" />
 </p>
-<p align="center">
-  <img src="screenshots/gameplay-3.png" width="45%" />
-  <img src="screenshots/gameplay-4.png" width="45%" />
-</p>
+
 
 > _Real-time gameplay, boss waves, physics, and an immersive FPS experience — all inside the browser._
 
@@ -175,5 +172,6 @@ zombie-city-game/
 <p align= "center">
 **Happy Gaming! 🚀**
 </p>
+
 
 
