@@ -170,8 +170,9 @@ zombie-city-game/
   <img src="public/pika.gif" alt="Zombie City Gameplay" width="80%" />
 </p>
 <p align= "center">
-**Happy Gaming! 🚀**
+Happy Gaming! 🚀
 </p>
+
 
 
 
