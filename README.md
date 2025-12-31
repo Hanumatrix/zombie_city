@@ -4,7 +4,7 @@
 > **zombie-city** is a fast-paced zombie survival game built for the web.  
 > No downloads. No installs. Just pure survival.
 
--🎮 **Play now:** [https://unrivaled-gumption-60d183.netlify.app/]
+-🎮 **Play now:** https://unrivaled-gumption-60d183.netlify.app/
 
 
 <p align="center">
@@ -69,8 +69,8 @@
 ## 🖼️ Game Preview
 
 <p align="center">
-  <img src="public/screenshot.png" alt="Zombie City Gameplay 1" width="45%" />
-  <img src="public/screenshot1.png" alt="Zombie City Gameplay 2" width="45%" />
+  <img src="public/screenshot.jpeg" alt="Zombie City Gameplay 1" width="45%" />
+  <img src="public/screenshot1.jpeg" alt="Zombie City Gameplay 2" width="45%" />
 </p>
 
 
@@ -172,6 +172,7 @@ zombie-city-game/
 <p align= "center">
 **Happy Gaming! 🚀**
 </p>
+
 
 
 
