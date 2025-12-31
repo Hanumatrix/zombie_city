@@ -111,8 +111,8 @@ zombie-city-game/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/Hanumatrix/zombie-city-game.git
-   cd zombie-city-game
+   git clone https://github.com/Hanumatrix/zombie_city
+   cd zombie_city
    ```
 
 2. **Install dependencies**
@@ -172,6 +172,7 @@ zombie-city-game/
 <p align= "center">
 **Happy Gaming! 🚀**
 </p>
+
 
 
 
